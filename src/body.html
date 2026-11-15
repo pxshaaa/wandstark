@@ -1,0 +1,128 @@
+<div class="wrap">
+  <header>
+    <h1>AD 2000 Rechner</h1>
+    <span class="chip">Prototyp · nicht validiert</span>
+    <div class="seg" role="group" aria-label="Ansicht">
+      <button id="vMob" data-view="mob" aria-pressed="false"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3.5" y="1" width="7" height="12" rx="1.5"/></svg>Mobil</button>
+      <button id="vDesk" data-view="desk" aria-pressed="false"><svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="2" width="12" height="8" rx="1"/><path d="M5 12.5h4"/></svg>Desktop</button>
+    </div>
+  </header>
+
+  <div class="layout">
+    <div class="col">
+      <div class="picker" id="picker"></div>
+
+      <details class="card draw" id="drawCard" open>
+        <summary>Zeichnung <span class="sv" id="drawSub"></span><button type="button" class="pinbtn" id="pinBtn" aria-pressed="false" title="Zeichnung beim Scrollen oben halten"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 2h4l-.6 4 2.6 2.2V9.6H4V8.2L6.6 6z"/><path d="M8 9.6V14"/></svg><span>Anheften</span></button></summary>
+        <div class="inner"><div class="tzwrap" id="drawing"></div><p class="help drawnote" id="drawNote" hidden></p></div>
+      </details>
+      <section class="card">
+        <h2 id="modTitle">Bauteil</h2>
+        <div class="rows" id="modFields"></div>
+        <p class="help" id="modHelp" hidden></p>
+        <details class="tips" id="modTips" hidden open><summary>Eingabetipps</summary><ul></ul></details>
+      </section>
+
+      <section class="card">
+        <h2>Betrieb</h2>
+        <div class="rows">
+          <div class="fr"><label for="p"><span>Berechnungsdruck</span><i>p · Überdruck</i></label><div class="box"><input id="p" inputmode="decimal" value="16"><em>bar</em></div></div>
+          <div class="fr"><label for="T"><span>Berechnungstemperatur</span><i>T</i></label><div class="box"><input id="T" inputmode="decimal" value="200"><em>°C</em></div></div>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Werkstoff</h2>
+        <div class="rows">
+          <div class="fr"><label for="matQ"><span>Werkstoff suchen</span><i>Name, Werkstoffnummer, alte DIN-Bezeichnung oder US-Werkstoffnummer</i></label><div class="box wide"><input id="matQ" type="search" placeholder="z. B. 1.0345, St 35.8, SA-516" style="text-align:left;font-family:var(--f-body)"></div></div>
+          <div class="fr"><label for="mat"><span>Werkstoff</span></label><div class="box wide"><select id="mat"></select></div></div>
+          <div class="fr"><label for="K20"><span>Kennwert bei 20 °C</span><i>K20</i></label><div class="box"><input id="K20" inputmode="decimal" value="265"><em>N/mm²</em></div></div>
+          <div class="fr"><label for="K"><span>Kennwert bei T <span class="auto" id="kAuto" hidden>auto</span></span><i>K</i></label><div class="box"><input id="K" inputmode="decimal" value="205"><em>N/mm²</em></div></div>
+          <div class="fr" id="EmRow"><label for="E"><span>E-Modul bei T <span class="auto" id="eAuto" hidden>auto</span></span><i>E · für B6</i></label><div class="box"><input id="E" inputmode="decimal" value="200000"><em>N/mm²</em></div></div>
+        </div>
+        <p class="help" id="matHelp"></p>
+      </section>
+
+      <details class="card" id="adv">
+        <summary>Faktoren &amp; Zuschläge <span class="sv" id="advSum"></span></summary>
+        <div class="rows">
+          <div class="fr"><label for="v"><span>Schweißnahtfaktor</span><i>v</i></label><div class="box wide"><select id="v"><option value="1">1,0 · vollständige zerstörungsfreie Prüfung</option><option value="0.85">0,85 · reduziert</option></select></div></div>
+          <div class="fr"><label for="S"><span>Sicherheitsbeiwert</span><i>S</i></label><div class="box"><input id="S" inputmode="decimal" value="1,5"><em>–</em></div></div>
+          <div class="fr"><label for="ST"><span>Sicherheitsbeiwert Prüfung</span><i>S′ · B0</i></label><div class="box"><input id="ST" inputmode="decimal" value="1,05"><em>–</em></div></div>
+          <div class="fr"><label for="c1"><span>Minustoleranz</span><i>c1</i></label><div class="box"><input id="c1" inputmode="decimal" value="0,3"><em>mm</em></div></div>
+          <div class="fr"><label for="c2"><span>Korrosionszuschlag</span><i>c2</i></label><div class="box"><input id="c2" inputmode="decimal" value="1"><em>mm</em></div></div>
+        </div>
+      </details>
+    </div>
+
+    <div class="col side" id="result">
+      <section class="card">
+        <div class="res" id="resBox">
+          <div class="status" id="status"><span class="dot"></span><span id="statusTxt">–</span></div>
+          <div class="hero"><b id="sReq">–</b><span id="sOf"></span></div>
+          <div class="bar" id="bar"><div id="barFill"></div></div>
+          <div class="stats" id="stats"></div>
+        </div>
+      </section>
+      <details class="card" open>
+        <summary>Rechengang</summary>
+        <div class="inner"><div class="formula" id="formula"></div></div>
+      </details>
+      <details class="card">
+        <summary>Prüfdruck</summary>
+        <div class="inner"><div class="stats" id="test"></div><p class="help" style="padding:8px 0 0" id="testNote"></p></div>
+      </details>
+      <details class="card">
+        <summary>Zwischenwerte</summary>
+        <div class="inner tbl"><table><tbody id="rows"></tbody></table></div>
+      </details>
+      <details class="card" open>
+        <summary>Hinweise <span class="sv" id="noteSum"></span></summary>
+        <div class="inner"><ul class="notes" id="notes"></ul></div>
+      </details>
+      <details class="card" id="vesCard" open>
+        <summary>Behälter <span class="sv" id="vesSum"></span></summary>
+        <div class="inner proj">
+          <div class="prow"><input id="vesName" placeholder="Behältername, etwa B-101" aria-label="Behältername"></div>
+          <p class="help" style="padding:0" id="vesEdit" hidden></p>
+          <ul class="plist vlist" id="vesList"></ul>
+          <div class="prow"><input id="vesComp" placeholder="Bauteilname, etwa Mantel" aria-label="Bauteilname"><button class="btn sm" id="vesAdd">Aktuelles Bauteil hinzufügen</button></div>
+          <div class="prow"><button class="btn sm ghost" id="vesApply">Druck und Temperatur auf alle übertragen</button><button class="btn sm ghost" id="vesPrev">Vorschau Gesamtbericht</button><button class="btn sm" id="vesPdf">Gesamtbericht (PDF)</button></div>
+          <p class="help" style="padding:0" id="vesMsg">Mantel, Böden, Stutzen usw. nacheinander rechnen und hier sammeln. Jedes Bauteil behält seinen Werkstoff und seine Maße.</p>
+        </div>
+      </details>
+      <details class="card" id="projCard">
+        <summary>Projekte <span class="sv" id="projSum"></span></summary>
+        <div class="inner proj">
+          <div class="prow"><input id="projName" placeholder="Projektname, z. B. Behälter B-101" aria-label="Projektname"><button class="btn sm" id="projSave">Speichern</button></div>
+          <ul class="plist" id="projList"></ul>
+          <div class="prow"><button class="btn sm ghost" id="projExport">Projektdaten kopieren</button><button class="btn sm ghost" id="projImportBtn">Projektdaten importieren</button></div>
+          <textarea id="projIO" hidden aria-label="Projektdaten" placeholder="Kopierte Projektdaten hier einfügen"></textarea>
+          <button class="btn sm" id="projImport" hidden>Import ausführen</button>
+          <p class="help" style="padding:0" id="projMsg">Projekte werden nur in diesem Browser gespeichert. Zum Weitergeben die Projektdaten kopieren.</p>
+        </div>
+      </details>
+      <div>
+        <div class="prow"><button class="btn sm ghost" id="pdfPrev" style="flex:1">Vorschau</button><button class="btn sm" id="pdfBtn" style="flex:2">PDF-Bericht herunterladen</button></div>
+        <p class="help" style="padding:6px 0 10px" id="pdfMsg">Bericht mit Eingaben, Zeichnung, Rechengang, Ergebnis und Auswertung.</p>
+        <button class="btn ghost" id="copy">Bericht als Text kopieren</button>
+        <textarea id="fallback" hidden readonly aria-label="Bericht"></textarea>
+      </div>
+      <p class="disclaimer">Vereinfachte Umsetzung von AD 2000-Merkblättern und 2014/68/EU, nicht gegen DIMy validiert. Nicht für echte Auslegungen verwenden.</p>
+    </div>
+  </div>
+</div>
+
+<div class="dock" id="dock">
+  <div class="grow">
+    <div class="dl" id="dockL">–</div>
+    <div class="dv" id="dockV">–</div>
+    <div class="bar" id="dockBar"><div id="dockFill"></div></div>
+  </div>
+  <a href="#result">Details</a>
+</div>
+
+<div class="pvw" id="pvw" hidden role="dialog" aria-modal="true" aria-labelledby="pvTitle">
+  <div class="pvbar"><div class="pvt"><b id="pvTitle">Vorschau</b><span id="pvInfo"></span></div><button class="btn sm" id="pvDl">Herunterladen</button><button class="btn sm ghost" id="pvClose">Schließen</button></div>
+  <div class="pvpages" id="pvPages"></div>
+</div>

@@ -1,0 +1,18 @@
+{
+  "name": "wandstark-web",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-13",
+  "workers_dev": false,
+  "routes": [
+    { "pattern": "tinyjar.app/wandstark*", "zone_name": "tinyjar.app" }
+  ],
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "none"
+  },
+  "durable_objects": { "bindings": [ { "name": "GUARD", "class_name": "Guard" } ] },
+  "migrations": [ { "tag": "v1", "new_sqlite_classes": ["Guard"] } ]
+}

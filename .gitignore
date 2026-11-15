@@ -1,0 +1,9 @@
+# generated
+/index.html
+/out/
+web/public/wandstark/index.html
+web/.wrangler/
+node_modules/
+.DS_Store
+# operator-specific legal page (contains personal contact data) — add your own before deploying
+web/public/wandstark/privacy/
