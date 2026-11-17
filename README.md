@@ -1,5 +1,7 @@
 # Wandstark
 
+Strength calculations for pressure vessels, done in seconds instead of hours with the rulebook.
+
 **Wandstark** is a browser-based strength calculator for pressure equipment. It computes required wall thicknesses and allowable pressures for shells, heads, cones, nozzles, pipe tees, flanges, stiffening rings and supports, assesses corrosion damage, and classifies equipment under the EU Pressure Equipment Directive.
 
 Live (access code required): <https://tinyjar.app/wandstark/> · About page: <https://tinyjar.app/wandstark/about/>
